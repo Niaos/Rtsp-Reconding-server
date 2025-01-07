@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTSP预览</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        video { width: 100%; max-width: 800px; cursor: move; }
+        .drop-area {
+            width: 400px;
+            height: 300px;
+            border: 2px dashed #ccc;
+            position: relative;
+            margin-top: 20px;
+        }
+        .drop-area .video-container {
+            position: absolute;
+            width: 100px; /* 自定义视频容器的宽度 */
+            height: 75px; /* 自定义视频容器的高度 */
+            border: 1px solid #000;
+            display: none; /* 初始隐藏 */
+        }
+    </style>
+</head>
+<body>
+
+<h2>RTSP预览</h2>
+<video id="video" controls autoplay draggable="true">
+    <source src="your_rtsp_stream_url" type="video/mp4">
+    您的浏览器不支持视频标签。
+</video>
+
+<div class="drop-area" id="dropArea">
+    <div class="video-container" id="videoContainer"></div>
+</div>
+
+<nav>
+    <a href="login.html">返回登录页</a>
+    <a href="setting.html">设置页面</a>
+    <a href="storage.html">文件储藏页面</a>
+</nav>
+
+<script>
+    const video = document.getElementById('video');
+    const dropArea = document.getElementById('dropArea');
+    const videoContainer = document.getElementById('videoContainer');
+
+    // 拖动开始事件
+    video.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', 'video');
+    });
+
+    // 允许拖放
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+
+    // 拖放事件
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        placeVideo(e.clientX, e.clientY);
+    });
+
+    // 触摸事件处理
+    video.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        placeVideo(touch.clientX, touch.clientY);
+    });
+
+    function placeVideo(x, y) {
+        const rect = dropArea.getBoundingClientRect();
+        const posX = x - rect.left - (videoContainer.offsetWidth / 2);
+        const posY = y - rect.top - (videoContainer.offsetHeight / 2);
+        
+        // 显示视频容器并设置位置
+        videoContainer.style.display = 'block';
+        videoContainer.style.left = `${posX}px`;
+        videoContainer.style.top = `${posY}px`;
+        videoContainer.style.position = 'absolute';
+        videoContainer.appendChild(video.cloneNode(true)); // 克隆视频并添加到容器中
+    }
+</script>
+
+</body>
+</html>

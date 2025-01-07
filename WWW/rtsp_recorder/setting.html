@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        form { max-width: 400px; margin: auto; }
+        .rectangle {
+            width: 320px; /* 16:9比例的宽度 */
+            height: 180px; /* 16:9比例的高度 */
+            border: 1px solid #000;
+            margin: 10px 0;
+            position: relative;
+        }
+        .rectangle .video-container {
+            position: absolute;
+            width: 100%; 
+            height: 100%; 
+            display: none; /* 初始隐藏 */
+        }
+    </style>
+</head>
+<body>
+
+<h2>设置页面</h2>
+<form id="streamForm">
+    <label for="streamName">RTSP流名字:</label>
+    <input type="text" id="streamName" required><br>
+    <label for="resolution">录制分辨率:</label>
+    <input type="text" id="resolution" required><br>
+    <label for="bitrate">录制码率:</label>
+    <input type="text" id="bitrate" required><br>
+    <label for="loginIp">登录IP地址:</label>
+    <input type="text" id="loginIp" value="localhost" required><br>
+    <label for="loginPort">登录端口:</label>
+    <input type="number" id="loginPort" value="3000" required><br>
+    <button type="button" onclick="addStream()">添加流</button>
+</form>
+
+<h3>已添加的流</h3>
+<div id="streamList"></div>
+
+<nav>
+    <a href="login.html">返回登录页</a>
+    <a href="preview.html">预览页面</a>
+    <a href="storage.html">文件储藏页面</a>
+</nav>
+
+<script>
+    const streamList = document.getElementById('streamList');
+
+    function addStream() {
+        const streamName = document.getElementById('streamName').value;
+        const resolution = document.getElementById('resolution').value;
+        const bitrate = document.getElementById('bitrate').value;
+        const loginIp = document.getElementById('loginIp').value;
+        const loginPort = document.getElementById('loginPort').value;
+
+        if (streamName && resolution && bitrate) {
+            const streamItem = document.createElement('div');
+            streamItem.innerHTML = `
+                <div>
+                    <strong>${streamName}</strong> - ${resolution} - ${bitrate} kbps
+                    <button onclick="removeStream(this)">删除</button>
+                </div>
+                <div class="rectangle">
+                    <div class="video-container" id="videoContainer_${streamName}"></div>
+                </div>
+            `;
+            streamList.appendChild(streamItem);
+            document.getElementById('streamForm').reset(); // 重置表单
+        }
+
+        // 保存登录IP和端口
+        localStorage.setItem('loginIp', loginIp);
+        localStorage.setItem('loginPort', loginPort);
+    }
+
+    function removeStream(button) {
+        const streamItem = button.parentElement.parentElement;
+        streamList.removeChild(streamItem);
+    }
+
+    // 加载保存的IP和端口
+    window.onload = function() {
+        const savedIp = localStorage.getItem('loginIp') || 'localhost';
+        const savedPort = localStorage.getItem('loginPort') || '3000';
+        document.getElementById('loginIp').value = savedIp;
+        document.getElementById('loginPort').value = savedPort;
+    };
+</script>
+
+</body>
+</html>

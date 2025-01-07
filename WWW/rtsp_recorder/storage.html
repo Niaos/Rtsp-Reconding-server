@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件储藏页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .stream-item { margin: 20px 0; }
+        .video-container {
+            width: 100%; /* 适应屏幕宽度 */
+            max-width: 320px; /* 最大宽度 */
+            height: auto; /* 高度自适应 */
+            border: 1px solid #000;
+            position: relative;
+        }
+        video { width: 100%; height: auto; }
+        a { display: block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<h2>文件储藏页面</h2>
+<div id="streamList"></div>
+
+<nav>
+    <a href="login.html">返回登录页</a>
+    <a href="preview.html">预览页面</a>
+    <a href="setting.html">设置页面</a>
+</nav>
+
+<script>
+    const streamList = document.getElementById('streamList');
+
+    // 示例数据，您可以根据实际情况替换
+    const streams = [
+        { name: 'Stream 1', recordings: ['recording1.mp4', 'recording2.mp4'] },
+        { name: 'Stream 2', recordings: ['recording3.mp4'] },
+    ];
+
+    streams.forEach(stream => {
+        const streamItem = document.createElement('div');
+        streamItem.className = 'stream-item';
+        streamItem.innerHTML = `<h3>${stream.name}</h3>`;
+        
+        stream.recordings.forEach(recording => {
+            const recordingItem = document.createElement('div');
+            recordingItem.innerHTML = `
+                <div class="video-container">
+                    <video controls>
+                        <source src="${recording}" type="video/mp4">
+                        您的浏览器不支持视频标签。
+                    </video>
+                </div>
+                <a href="${recording}" download>下载 ${recording}</a>
+            `;
+            streamItem.appendChild(recordingItem);
+        });
+
+        streamList.appendChild(streamItem);
+    });
+</script>
+
+</body>
+</html>
