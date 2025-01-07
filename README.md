@@ -24,8 +24,11 @@ V1.2
 说明：
 录制文件路径：脚本生成的视频文件会保存在 /opt/rtsp_recorder 目录下。
 服务管理：
+
 启动服务：sudo systemctl start rtsp_recorder
+
 停止服务：sudo systemctl stop rtsp_recorder
+
 查看日志：sudo journalctl -u rtsp_recorder
 
 安装与运行：
