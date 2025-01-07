@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录页</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        form { max-width: 300px; margin: auto; }
+    </style>
+</head>
+<body>
+
+<h2>登录页</h2>
+<form onsubmit="return login()">
+    <label for="username">用户名:</label>
+    <input type="text" id="username" value="admin"><br>
+    <label for="password">密码:</label>
+    <input type="password" id="password" value="admin"><br>
+    <button type="submit">登录</button>
+    <button type="button" onclick="updateConfig()">更新配置</button>
+</form>
+
+<nav>
+    <a href="preview.html">预览页面</a>
+    <a href="setting.html">设置页面</a>
+    <a href="storage.html">文件储藏页面</a>
+</nav>
+
+<script>
+    function login() {
+        // 登录逻辑
+        alert('登录成功！');
+        // 这里可以添加跳转到其他页面的逻辑
+        window.location.href = 'preview.html'; // 登录后跳转到预览页面
+        return false; // 防止表单提交
+    }
+
+    function updateConfig() {
+        const loginIp = document.getElementById('loginIp').value;
+        const loginPort = document.getElementById('loginPort').value;
+
+        fetch('/api/config', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ip: loginIp, port: loginPort }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+</body>
+</html>
